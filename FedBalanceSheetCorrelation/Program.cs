@@ -48,14 +48,9 @@ namespace FedBalanceSheetCorrelation // Note: actual namespace depends on the pr
 
         public decimal High { get; set; }
         public decimal Low { get; set; }
-
-
-        //public decimal HighChgPct { get; set; }
+                
         public decimal HighChangePercent { get; set; }
-
         public decimal LowChangePercent { get; set; }
-
-
 
         // if    balance sheet change > 0    AND    HighChangePercent >  1%    THEN   1
         // if    balance sheet change < 0    AND    LowChangePercent  < -1%    THEN   1
@@ -68,10 +63,8 @@ namespace FedBalanceSheetCorrelation // Note: actual namespace depends on the pr
         // threshold = 1% by default
 
         public int Influence1 { get; set; }
-
         public int Influence2 { get; set; }
         public int Influence3 { get; set; }
-        
     }
 
     internal class Program
@@ -98,82 +91,6 @@ namespace FedBalanceSheetCorrelation // Note: actual namespace depends on the pr
                 new CsvReader(new StreamReader(@"C:\Users\dharm\Downloads\WALCL-weekly-changes.csv"), config)
                 .GetRecords<FedBalanceSheetCsvRow>()
                 .ToList();
-
-
-            // Wednesday
-
-            //var result = fed_balance_sheet_items.SkipLast(1).Select(item =>
-            //    {
-            //        var a = spx_items.First(elt => elt.DateTime == item.Date);
-
-            //        var b = spx_items.First(elt => elt.DateTime == a.DateTime.AddDays(7));
-
-            //        return new Data()
-            //        {
-            //            DateTime = item.Date,
-            //            FedBalanceSheetChange = item.Change,
-            //            SpxChange = b.Close - a.Close
-            //        };
-            //    });
-
-
-
-            //var result = fed_balance_sheet_items.SkipLast(10).Select(item =>
-            //    {
-            //        var a = spx_items.FirstOrDefault(elt => elt.DateTime == item.Date.AddDays(1));
-
-            //        var b = spx_items.FirstOrDefault(elt => elt.DateTime == a.DateTime.AddDays(7));
-
-            //        if (a == null || b == null)
-            //        {
-            //            return new Data()
-            //            {
-            //                DateTime = item.Date,
-            //                FedBalanceSheetChange = item.Change,
-            //                SpxChange = 0
-            //            };
-            //        }
-
-            //        else
-            //            return new Data()
-            //            {
-            //                DateTime = item.Date,
-            //                FedBalanceSheetChange = item.Change,
-            //                SpxChange = b.Close - a.Close
-            //            };
-            //    });
-
-
-            // Thursday
-
-            //var result = fed_balance_sheet_items.SkipLast(1).Select(item =>
-            //{
-            //    var null_item = new Data()
-            //    {
-            //        DateTime = item.Date,
-            //        FedBalanceSheetChange = item.Change,
-            //        SpxChange = 123456
-            //    };
-
-            //    var a = spx_items.FirstOrDefault(elt => elt.DateTime == item.Date.AddDays(1));
-
-            //    if (a == null) return null_item;
-
-            //    var b = spx_items.FirstOrDefault(elt => elt.DateTime == a.DateTime.AddDays(7));
-
-            //    if (b == null) return null_item;
-
-            //    return new Data()
-            //    {
-            //        DateTime = item.Date,
-            //        FedBalanceSheetChange = item.Change,
-            //        SpxChange = b.Close - a.Close
-            //    };
-            //});
-
-
-
-            // max and min gain
 
             var result = fed_balance_sheet_items.SkipLast(1).Select(item =>
             {
