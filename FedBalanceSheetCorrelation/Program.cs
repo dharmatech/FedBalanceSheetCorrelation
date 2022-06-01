@@ -5,7 +5,7 @@ using CsvHelper.Configuration;
 
 using System.Globalization;
 
-namespace FedBalanceSheetCorrelation // Note: actual namespace depends on the project name.
+namespace FedBalanceSheetCorrelation
 {
     public class SpxCsvRow
     {
@@ -73,6 +73,8 @@ namespace FedBalanceSheetCorrelation // Note: actual namespace depends on the pr
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture) { };
                         
+            // From TradingView CSV export
+
             var spx_csv_items = new CsvReader(new StreamReader(@"C:\Users\dharm\Downloads\SP_SPX, 1D.csv"), config)
                 .GetRecords<SpxCsvRow>()
                 .ToList();
@@ -86,6 +88,10 @@ namespace FedBalanceSheetCorrelation // Note: actual namespace depends on the pr
                     Low = item.Low,
                     Close = item.Close
                 });
+
+            // From:
+            // 
+            //     https://fred.stlouisfed.org/graph/?g=PRKH
 
             var fed_balance_sheet_items = 
                 new CsvReader(new StreamReader(@"C:\Users\dharm\Downloads\WALCL-weekly-changes.csv"), config)
