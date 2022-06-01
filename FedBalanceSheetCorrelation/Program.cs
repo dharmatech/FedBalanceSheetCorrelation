@@ -177,16 +177,25 @@ namespace FedBalanceSheetCorrelation // Note: actual namespace depends on the pr
 
             var result = fed_balance_sheet_items.SkipLast(1).Select(item =>
             {
-                //var null_item = new Data()
-                //{
-                //    DateTime = item.Date,
-                //    FedBalanceSheetChange = item.Change,
-                //    SpxChange = 123456
-                //};
-                                
+                // Wednesday to Wednesday
+
+                //var items = spx_items
+                //    .SkipWhile(elt => elt.DateTime < item.Date)
+                //    .TakeWhile(elt => elt.DateTime <= item.Date.AddDays(7))
+                //    .ToList();
+
+                // Wednesday to Tuesday
+
+                //var items = spx_items
+                //    .SkipWhile(elt => elt.DateTime < item.Date)
+                //    .TakeWhile(elt => elt.DateTime < item.Date.AddDays(7))
+                //    .ToList();
+
+                // Friday to Thursday
+
                 var items = spx_items
-                    .SkipWhile(elt => elt.DateTime < item.Date)
-                    .TakeWhile(elt => elt.DateTime <= item.Date.AddDays(7))
+                    .SkipWhile(elt => elt.DateTime < item.Date.AddDays(2))
+                    .TakeWhile(elt => elt.DateTime < item.Date.AddDays(2+7))
                     .ToList();
 
                 var high = items.Max(elt => elt.High);
@@ -202,17 +211,6 @@ namespace FedBalanceSheetCorrelation // Note: actual namespace depends on the pr
 
 
                 var threshold = (decimal) 0.01;
-
-                //int influence(decimal threshold) =>
-                //    item.Change > 0 ? (high_change_percent > threshold ? 1 : 0) :
-                //    item.Change < 0 ? (low_change_percent * -1 > threshold ? 1 : 0) :
-                //    0;
-
-                //int influence(decimal threshold) =>
-                //    item.Change > 0 ? (high_change_percent     > threshold ? 1 : low_change_percent * -1 > threshold ? -1 : 0) :
-                //    item.Change < 0 ? (low_change_percent * -1 > threshold ? 1 : high_change_percent     > threshold ? -1 : 0) :
-                //    0;
-
 
                 int influence(decimal threshold)
                 {
@@ -244,11 +242,6 @@ namespace FedBalanceSheetCorrelation // Note: actual namespace depends on the pr
                     HighChangePercent = (high - open) / open,
                     LowChangePercent = (low - open) / open,
 
-                    //Influence = 
-                    //    item.Change > 0 ? (high_change_percent     > threshold ? 1 : 0) :
-                    //    item.Change < 0 ? (low_change_percent * -1 > threshold ? 1 : 0) :
-                    //    0,
-
                     Influence1 = influence(0.01m),
                     Influence2 = influence(0.02m),
                     Influence3 = influence(0.03m)
@@ -256,31 +249,11 @@ namespace FedBalanceSheetCorrelation // Note: actual namespace depends on the pr
                 };
             });
 
-
-
-
-            //var result_a = result.Where(elt => elt.SpxChange != 123456);
-
-            ////var result_b = result_a
-            ////    //.Where(elt => elt.FedBalanceSheetChange > 0)
-            ////    .Count(elt => elt.FedBalanceSheetChange * elt.SpxChange > 0)
-            ////    ;
-
-            //Console.WriteLine(
-            //    (double)result_a.Count(elt => elt.FedBalanceSheetChange * elt.SpxChange > 0)
-            //    / 
-            //    (double)result_a.Count()
-            //    );
-
-
             using (var writer = new StreamWriter(@"c:\temp\out.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
                 csv.WriteRecords(result);
             }
-
-            // If balance sheet grew        was gain more than 1%
-            // If balance sheet dropped     was loss more than 1%
         }
     }
 }
