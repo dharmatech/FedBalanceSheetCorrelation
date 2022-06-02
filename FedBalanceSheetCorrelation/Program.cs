@@ -75,7 +75,7 @@ namespace FedBalanceSheetCorrelation
                         
             // From TradingView CSV export
 
-            var spx_csv_items = new CsvReader(new StreamReader(@"C:\Users\dharm\Downloads\SP_SPX, 1D.csv"), config)
+            var spx_csv_items = new CsvReader(new StreamReader(@"..\..\..\SP_SPX, 1D.csv"), config)
                 .GetRecords<SpxCsvRow>()
                 .ToList();
 
@@ -94,7 +94,7 @@ namespace FedBalanceSheetCorrelation
             //     https://fred.stlouisfed.org/graph/?g=PRKH
 
             var fed_balance_sheet_items = 
-                new CsvReader(new StreamReader(@"C:\Users\dharm\Downloads\WALCL-weekly-changes.csv"), config)
+                new CsvReader(new StreamReader(@"..\..\..\WALCL.csv"), config)
                 .GetRecords<FedBalanceSheetCsvRow>()
                 .ToList();
 
@@ -172,7 +172,7 @@ namespace FedBalanceSheetCorrelation
                 };
             });
 
-            using (var writer = new StreamWriter(@"c:\temp\out.csv"))
+            using (var writer = new StreamWriter(@"..\..\..\out.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
                 csv.WriteRecords(result);
